@@ -1,6 +1,7 @@
 package energy.rensource.videorentals.controller;
 
 import energy.rensource.videorentals.model.Video;
+import energy.rensource.videorentals.payload.VideoResponse;
 import energy.rensource.videorentals.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class VideoRentalController {
 
     @GetMapping(value = {"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getVideos() {
-        List<Video> videos = videoService.getAllVideo();
+        List<VideoResponse> videos = videoService.getAllVideo();
         return new ResponseEntity<>(videos, HttpStatus.OK);
     }
 }

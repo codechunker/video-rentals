@@ -1,4 +1,4 @@
-package energy.rensource.videorentals.repository;
+package energy.rensource.videorentals.repository.hibernate;
 
 import energy.rensource.videorentals.model.VideoType;
 import org.springframework.data.jpa.repository.JpaRepository;

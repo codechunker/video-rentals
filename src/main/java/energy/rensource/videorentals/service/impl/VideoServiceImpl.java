@@ -7,9 +7,11 @@ import energy.rensource.videorentals.enums.Type;
 import energy.rensource.videorentals.model.Video;
 import energy.rensource.videorentals.model.VideoGenre;
 import energy.rensource.videorentals.model.VideoType;
-import energy.rensource.videorentals.repository.VideoGenreRepository;
-import energy.rensource.videorentals.repository.VideoRentalRepository;
-import energy.rensource.videorentals.repository.VideoTypeRepository;
+import energy.rensource.videorentals.payload.VideoResponse;
+import energy.rensource.videorentals.repository.hibernate.VideoGenreRepository;
+import energy.rensource.videorentals.repository.hibernate.VideoRentalRepository;
+import energy.rensource.videorentals.repository.hibernate.VideoTypeRepository;
+import energy.rensource.videorentals.repository.sql.VideoRepository;
 import energy.rensource.videorentals.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,12 @@ import java.util.List;
 
 @Service
 public class VideoServiceImpl implements VideoService {
-    final VideoRentalRepository repository;
+    final VideoRepository repository;
     final VideoTypeRepository typeRepository;
     final VideoGenreRepository genreRepository;
+
+    //Needed this to populate the db easily with Hibernate
+    final VideoRentalRepository rentalRepository;
 
     @PostConstruct
     void init() {
@@ -35,10 +40,12 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Autowired
-    public VideoServiceImpl(VideoRentalRepository repository, VideoTypeRepository typeRepository, VideoGenreRepository genreRepository) {
+    public VideoServiceImpl(VideoRepository repository, VideoTypeRepository typeRepository,
+                            VideoGenreRepository genreRepository, VideoRentalRepository rentalRepository) {
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.genreRepository = genreRepository;
+        this.rentalRepository = rentalRepository;
     }
 
 
@@ -106,12 +113,12 @@ public class VideoServiceImpl implements VideoService {
 
 
     @Override
-    public List<Video> getAllVideo() {
-        return repository.findAll();
+    public List<VideoResponse> getAllVideo() {
+        return repository.getVideos();
     }
 
     public void populateDummyVideos(List<Video> videos) {
-        repository.saveAll(videos);
+        rentalRepository.saveAll(videos);
     }
 
     public void populateDummyVideoTypes(List<VideoType> videoTypes) {
