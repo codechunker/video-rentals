@@ -13,16 +13,14 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoType {
+public class VideoGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private double price;
 
-    public VideoType(String name, double price) {
+    public VideoGenre(String name) {
         this.name = name;
-        this.price = price;
     }
 }
