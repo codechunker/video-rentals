@@ -1,10 +1,7 @@
 package energy.rensource.videorentals.service;
 
 
-import energy.rensource.videorentals.model.Video;
-import energy.rensource.videorentals.model.VideoDetails;
-import energy.rensource.videorentals.model.VideoGenre;
-import energy.rensource.videorentals.model.VideoType;
+import energy.rensource.videorentals.model.*;
 import energy.rensource.videorentals.payload.VideoResponse;
 
 import java.util.List;
@@ -25,4 +22,7 @@ public interface VideoService {
 
     VideoGenre createVideoGenre(VideoGenre genre);
 
+    void savePriceCalcRequest(PriceRequest request);
+
+    List<PriceRequest> getPriceCalcRequests(int pageNumber, int pageSize);
 }

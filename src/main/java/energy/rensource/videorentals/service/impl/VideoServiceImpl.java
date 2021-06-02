@@ -4,11 +4,9 @@ package energy.rensource.videorentals.service.impl;
 
 import energy.rensource.videorentals.enums.Genre;
 import energy.rensource.videorentals.enums.Type;
-import energy.rensource.videorentals.model.Video;
-import energy.rensource.videorentals.model.VideoDetails;
-import energy.rensource.videorentals.model.VideoGenre;
-import energy.rensource.videorentals.model.VideoType;
+import energy.rensource.videorentals.model.*;
 import energy.rensource.videorentals.payload.VideoResponse;
+import energy.rensource.videorentals.repository.hibernate.PriceRequestRepository;
 import energy.rensource.videorentals.repository.hibernate.VideoGenreRepository;
 import energy.rensource.videorentals.repository.hibernate.VideoRentalRepository;
 import energy.rensource.videorentals.repository.hibernate.VideoTypeRepository;
@@ -39,6 +37,7 @@ public class VideoServiceImpl implements VideoService {
 
     //Needed this to populate the db easily with Hibernate
     final VideoRentalRepository rentalRepository;
+    final PriceRequestRepository priceRepository;
 
     @PostConstruct
     void init() throws ParseException {
@@ -50,13 +49,16 @@ public class VideoServiceImpl implements VideoService {
         populateDummyVideoTypes(types);
     }
 
-    @Autowired
+
     public VideoServiceImpl(VideoRepository repository, VideoTypeRepository typeRepository,
-                            VideoGenreRepository genreRepository, VideoRentalRepository rentalRepository) {
+                            VideoGenreRepository genreRepository,
+                            VideoRentalRepository rentalRepository,
+                            PriceRequestRepository priceRepository) {
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.genreRepository = genreRepository;
         this.rentalRepository = rentalRepository;
+        this.priceRepository = priceRepository;
     }
 
 
@@ -124,7 +126,6 @@ public class VideoServiceImpl implements VideoService {
         return videoTypes;
     }
 
-
     @Override
     public List<VideoResponse> getAllVideo(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,  pageSize);
@@ -164,6 +165,16 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public VideoGenre createVideoGenre(VideoGenre genre) {
         return genreRepository.save(genre);
+    }
+
+    @Override
+    public void savePriceCalcRequest(PriceRequest request) {
+        priceRepository.save(request);
+    }
+
+    @Override
+    public List<PriceRequest> getPriceCalcRequests(int pageNumber, int pageSize) {
+        return priceRepository.findAll();
     }
 
     public void populateDummyVideos(List<Video> videos) {

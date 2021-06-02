@@ -9,6 +9,7 @@ import energy.rensource.videorentals.model.*;
 import energy.rensource.videorentals.payload.PriceResponse;
 import energy.rensource.videorentals.payload.VideoResponse;
 import energy.rensource.videorentals.service.VideoService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +34,8 @@ public class VideoRentalController {
         this.videoService = videoService;
     }
 
-    @GetMapping(value = {""}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get all the videos in the database. pageNumber and pageSize are not compulsory")
+    @GetMapping(value = {"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getVideos(
             @RequestParam(required = false, defaultValue = Const.PAGE_NUMBER) int pageNumber,
             @RequestParam(required = false, defaultValue = Const.PAGE_SIZE) int pageSize
@@ -53,16 +55,28 @@ public class VideoRentalController {
         return new ResponseEntity<>(videos, HttpStatus.OK);
     }
 
+    @GetMapping(value = {"calc-requests"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllPriceCalcRequests(
+            @RequestParam(required = false, defaultValue = Const.PAGE_NUMBER) int pageNumber,
+            @RequestParam(required = false, defaultValue = Const.PAGE_SIZE) int pageSize
+    ) {
+        AppUtils.validatePageNumberAndSize(pageNumber, pageSize);
+        List<PriceRequest> requests = videoService.getPriceCalcRequests(pageNumber, pageSize);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "It is expected that the client provides video id to be calculated to prevent redundancy in db")
     @PostMapping(value = {"/price"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> calculatePrice(@Valid @RequestBody PriceRequest priceRequest) {
         log.info("Calculate Price Request: {}", priceRequest.toString());
         VideoDetails video = videoService.findAVideoById(priceRequest.getVideoId())
                 .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND.toString(), String.format("Video with id %d not found", priceRequest.getVideoId())));
         PriceResponse priceResponse = AppUtils.getCalcPriceResponse(priceRequest, video);
+        videoService.savePriceCalcRequest(priceRequest);
         return new ResponseEntity<>(priceResponse, HttpStatus.OK);
     }
 
-    @PostMapping(value = {""}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = {"/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createVideo(@Valid @RequestBody Video video) {
         log.info("Create Video Request: {}", video.toString());
 
