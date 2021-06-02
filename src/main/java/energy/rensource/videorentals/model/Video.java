@@ -3,9 +3,13 @@ package energy.rensource.videorentals.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -17,17 +21,25 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @NotNull
+    @NotBlank(message = "Video title is needed")
     @Column(name = "title")
     private String title;
+
+    @NotNull
     @Column(name = "type")
-    private int videoType;
+    private Integer videoType;
+
+    @NotNull
     @Column(name = "genre")
-    private int videoGenre;
+    private Integer videoGenre;
 
     //Nullables
+    @Column(name = "maxAge")
     private Integer maxAge = null;
-    @JsonFormat(pattern = "yyyy")
-    private LocalDate releaseYear = null;
+    @Column(name = "releaseYear")
+    private Integer releaseYear = null;
 
     public Video(String title, int videoType, int videoGenre) {
         this.title = title;
