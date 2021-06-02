@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface VideoService {
 
-    List<VideoResponse> getAllVideo();
+    List<VideoResponse> getAllVideo(int pageNumber, int pageSize);
 
 }

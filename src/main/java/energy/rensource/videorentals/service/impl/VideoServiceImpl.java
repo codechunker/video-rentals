@@ -14,6 +14,9 @@ import energy.rensource.videorentals.repository.hibernate.VideoTypeRepository;
 import energy.rensource.videorentals.repository.sql.VideoRepository;
 import energy.rensource.videorentals.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -113,8 +116,9 @@ public class VideoServiceImpl implements VideoService {
 
 
     @Override
-    public List<VideoResponse> getAllVideo() {
-        return repository.getVideos();
+    public List<VideoResponse> getAllVideo(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,  pageSize);
+        return repository.getVideos(pageable);
     }
 
     public void populateDummyVideos(List<Video> videos) {
