@@ -10,4 +10,5 @@ java -jar video-rentals.jar
 
 The application runs on port 8097 but of course you can change the port in the ***application.properties*** file in the config folder.
 ### Reference Documentation
-The documentation for the project can be found on http://localhost:8097/swagger-ui.html once the application is running.
+The documentation for the project can be found on http://localhost:8097/swagger-ui.html once the application is running. Sample Image is shown below:
+![Video Rentals Documentation](https://github.com/codechunker/video-rentals/blob/main/video-rentals-doc.PNG)
