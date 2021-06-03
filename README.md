@@ -7,7 +7,7 @@ running on your system. The application runs on port 8097 but of course you can 
  ```
 java -jar video-rentals.jar
 ```
-**The application will populate some video data in a temporary database (H2) that deletes the data once the application is restarted. Once the app starts running, go to http://localhost:8097/h2-console to see the data in the DB.**
+**The application will populate some video data in a temporary database (H2) that deletes the data once the application is restarted. Once the app starts running, go to http://localhost:8097/h2-console to see the data in the DB.** Login details are found in the application.properties file.
 
 # Flow, Concepts and Deductions
 The documentation says it should be able to list videos with their genre and types. So I wrote some functions to help to populate the db whenever the app is restarted. This made it handy for me to have some data to work with.
